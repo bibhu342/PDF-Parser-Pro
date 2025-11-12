@@ -9,6 +9,7 @@ import pdfplumber
 import pandas as pd
 import re
 import json
+import os
 from pathlib import Path
 import argparse
 
@@ -21,6 +22,29 @@ DEFAULT_OUTPUT_DIR = Path("data/extracted")
 # ---------------------------
 # Utility Functions
 # ---------------------------
+def ocr_pdf_to_text(pdf_path: Path, page_number: int = 1, poppler_path: str = None, dpi: int = 300):
+    """
+    Convert a single PDF page to image(s) and run Tesseract OCR to return extracted text.
+    - pdf_path: Path to PDF
+    - page_number: 1-based page index
+    - poppler_path: optional path to poppler bin (if not in PATH)
+    - returns string of extracted text for that page (or empty string)
+    """
+    try:
+        from pdf2image import convert_from_path
+        import pytesseract
+        kwargs = {"first_page": page_number, "last_page": page_number, "dpi": dpi}
+        if poppler_path:
+            kwargs["poppler_path"] = poppler_path
+        pages = convert_from_path(str(pdf_path), **kwargs)
+        if not pages:
+            return ""
+        img = pages[0]
+        text = pytesseract.image_to_string(img)
+        return text or ""
+    except Exception:
+        return ""
+
 def extract_tables_from_pdf(pdf_path: Path):
     """Extract all tables from all pages of a PDF. Uses pdfplumber tables first,
        then a text-based fallback for pages where extract_tables() returns empty.
@@ -54,6 +78,21 @@ def extract_table_from_text_fallback(page, header_keywords=None):
     """
     import pandas as pd
     text = page.extract_text() or ""
+    if not text:
+        try:
+            from pathlib import Path
+            import os
+            pdf_path = None
+            if hasattr(page, "pdf") and hasattr(page.pdf, "stream") and getattr(page.pdf.stream, "name", None):
+                pdf_path = Path(page.pdf.stream.name)
+            elif os.environ.get("PDFPARSER_CURRENT_PDF"):
+                pdf_path = Path(os.environ["PDFPARSER_CURRENT_PDF"])
+            if pdf_path and pdf_path.exists():
+                ocr_text = ocr_pdf_to_text(pdf_path, page.page_number)
+                if ocr_text:
+                    text = ocr_text
+        except Exception:
+            text = text
     lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
     if not lines:
         return []

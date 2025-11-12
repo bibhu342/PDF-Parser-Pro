@@ -4,6 +4,7 @@ import tempfile
 from pathlib import Path
 import json
 import io
+import os
 from scripts.parse_pdf_data import parse_single_pdf
 
 st.set_page_config(page_title="PDF-Parser-Pro", layout="wide")
@@ -19,12 +20,17 @@ if uploaded_file:
         tmp_file.write(uploaded_file.getvalue())
         tmp_path = Path(tmp_file.name)
 
+    enable_ocr = st.checkbox("Enable OCR (for scanned / image-only PDFs)", value=False)
+
     # Define output folder inside temp dir
     output_dir = Path(tempfile.mkdtemp())
 
     st.info("🔍 Parsing PDF, please wait...")
 
     try:
+        if enable_ocr:
+            os.environ["PDFPARSER_CURRENT_PDF"] = str(tmp_path)
+        
         audit = parse_single_pdf(tmp_path, output_dir)
         csv_files = list(output_dir.glob("*.csv"))
         csv_path = csv_files[0] if csv_files else None
@@ -56,6 +62,7 @@ if uploaded_file:
     except Exception as e:
         st.error(f"❌ Error while parsing: {e}")
     finally:
+        os.environ.pop("PDFPARSER_CURRENT_PDF", None)
         if tmp_path.exists():
             tmp_path.unlink(missing_ok=True)
 else:
