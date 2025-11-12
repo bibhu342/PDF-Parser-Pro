@@ -41,7 +41,36 @@ Built with `pdfplumber`, `pytesseract`, and `pandas`, this tool is designed for 
 
 ---
 
-## � Local Setup
+## 📸 Demo Screenshots
+
+### 1. Main Interface
+Clean, professional UI with sidebar branding and drag-and-drop file upload.
+
+![Main Interface](docs/screenshots/01_main_interface.png)
+
+### 2. File Upload
+Upload your PDF and toggle OCR for scanned documents.
+
+![File Upload](docs/screenshots/02_file_upload.png)
+
+### 3. Parsing Results
+View extracted data in a clean table format with validation summary.
+
+![Parsing Results](docs/screenshots/03_parsing_results.png)
+
+### 4. Download Options
+Export parsed data as CSV or audit JSON with one click.
+
+![Download Buttons](docs/screenshots/04_download_buttons.png)
+
+### 5. OCR Feature
+Enable OCR processing for scanned PDFs with visual feedback.
+
+![OCR Feature](docs/screenshots/05_ocr_feature.png)
+
+---
+
+## 💻 Local Setup
 
 ```powershell
 # Clone the repository

@@ -1,0 +1,17 @@
+# Screenshots Directory
+
+This directory contains demo screenshots and visual assets for the README.
+
+## Guidelines
+- Use descriptive filenames: `01_main_interface.png`, `02_parsing_results.png`
+- Keep images optimized (< 500KB each recommended)
+- PNG format for UI screenshots (better quality)
+- GIF format for animated demos (< 5MB recommended)
+
+## Current Screenshots
+- `01_main_interface.png` - Main Streamlit interface with branding
+- `02_file_upload.png` - File upload widget in action
+- `03_ocr_toggle.png` - OCR checkbox and settings
+- `04_parsing_results.png` - Parsed data displayed as DataFrame
+- `05_download_output.png` - Download buttons (JSON/CSV)
+- `demo.gif` (optional) - Animated walkthrough of parsing workflow
