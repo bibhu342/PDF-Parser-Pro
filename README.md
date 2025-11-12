@@ -1,120 +1,194 @@
-# 📄 PDF-Parser-Pro
+# PDF-Parser-Pro
 
-### A Python-powered PDF parsing and extraction tool — PDFs → CSV → Analytics-ready
-
----
-
-## 📘 Project Overview
-
-**PDF-Parser-Pro** is a production-ready Python tool that extracts structured data from business PDFs (invoices, statements, reports), normalizes tables and fields, and exports clean CSVs ready for analytics or downstream ML pipelines.
-
-It is designed for freelancers and engineers who need repeatable, auditable parsing workflows with optional OCR support for scanned documents.
+**Live Demo:** [https://pdf-parser-pro-bibhu342.streamlit.app/](https://pdf-parser-pro-bibhu342.streamlit.app/) ← *Try it instantly with the demo PDF*
 
 ---
 
-## 🎯 Objective
+## 🧾 Overview
 
-Automate extraction of tabular and key-value data from heterogeneous business PDFs, apply cleaning and validation rules, and output standardized CSV files suitable for analytics and ML.
+**PDF-Parser-Pro** is an AI-powered Python tool that extracts structured tables and key fields from business PDFs (invoices, statements, reports). It handles both text-based and scanned PDFs using OCR, outputting clean CSVs and audit JSONs for transparency and downstream analytics.
 
----
-
-## ⚙️ Tech Stack
-
-* **Language:** Python 3.11+
-* **Core libraries:** pdfplumber, pandas, pathlib, regex
-* **Optional:** pytesseract, pdf2image (for OCR/scanned PDFs)
-* **Dev tools:** Jupyter (notebooks/experiments), VS Code, GitHub
+Built with `pdfplumber`, `pytesseract`, and `pandas`, this tool is designed for freelancers, data engineers, and businesses who need repeatable, auditable PDF data extraction workflows.
 
 ---
 
-## 🧩 Functionality (MVP)
+## ⚙️ Features
 
-1. Read single or multiple PDF files from `data/raw/`.
-2. Detect and extract tabular regions using `pdfplumber`.
-3. Extract key-value pairs (invoice no, date, total) using regex heuristics.
-4. Normalize column names and data types (dates, currency, numeric fields).
-5. Apply validation rules (e.g., `total == sum(line_item_amounts)`) and flag mismatches.
-6. Export cleaned CSVs to `data/extracted/` and a small audit log for each file.
+- **Text + OCR Extraction** — Uses `pdfplumber` for text-based PDFs and `pdf2image` + `pytesseract` for scanned documents
+- **Intelligent Table Detection** — Automatic table extraction with fallback text-based parsing
+- **Normalized Columns** — Standardizes headers to `unit_price`, `quantity`, `line_total`, etc.
+- **Invoice Total Validation** — Compares line-item sum vs. declared total and flags mismatches
+- **Streamlit UI** with:
+  - Drag-and-drop file uploader
+  - OCR toggle for scanned PDFs
+  - One-click demo button with sample invoice
+  - CSV + audit JSON downloads
+- **Audit JSON** — Provides transparency (pages parsed, tables found, warnings, validation results)
+- **Professional Branding** — Custom UI with sidebar, footer, and green-themed design
 
 ---
 
-## 📁 Repository Structure
+## 🚀 Live Demo (One-Click)
+
+1. Visit: **[https://pdf-parser-pro-bibhu342.streamlit.app/](https://pdf-parser-pro-bibhu342.streamlit.app/)**
+2. Click **"Use demo invoice (sample)"** button
+3. View extracted data and audit summary instantly
+4. Download CSV or audit JSON with one click
+
+---
+
+## � Local Setup
+
+```powershell
+# Clone the repository
+git clone https://github.com/bibhu342/PDF-Parser-Pro.git
+cd PDF-Parser-Pro
+
+# Create and activate virtual environment
+python -m venv .venv
+.\.venv\Scripts\Activate  # Windows
+```
+
+**The app will open in your browser at `http://localhost:8501`**
+
+### OCR Setup (Optional - for scanned PDFs)
+
+For scanned PDF support, install Tesseract OCR and Poppler:
+
+```powershell
+# Install Tesseract OCR
+winget install --id UB-Mannheim.TesseractOCR
+
+# Run the setup script to configure OCR dependencies
+python setup_ocr_dependencies.py
+```
+
+---
+
+## 🧩 File Structure
 
 ```
 PDF-Parser-Pro/
-├── data/
-│   ├── raw/          # input PDFs
-│   └── extracted/    # parsed CSVs and audits
+├── app.py                          # Streamlit UI
 ├── scripts/
-│   └── parse_pdf_data.py
-├── notebooks/
-│   └── PDF_Parser_Pro_Dev.ipynb
+│   ├── parse_pdf_data.py          # Core parser (OCR fallback, normalization, validation)
+│   ├── ocr_verify.py              # OCR verification script
+│   └── generate_mock_invoice.py   # Demo invoice generator
+├── data/
+│   ├── raw/                       # Sample input PDFs
+│   └── extracted/                 # Output CSVs + audit JSONs
+├── notebooks/                     # Development/testing notebooks
 ├── tests/
-│   └── sample_pdfs/  # small set of labeled PDFs for unit tests
-├── README.md
+│   └── sample_pdfs/               # Test PDFs
 ├── requirements.txt
-└── .gitignore
+├── setup_ocr_dependencies.py      # OCR setup helper
+└── README.md
 ```
 
 ---
 
-## 🛠 How to Use (MVP)
+## 🔧 Command-Line Usage
 
-1. Clone repo:
+For batch processing or automation:
 
-```bash
-git clone <repo-url>
-cd PDF-Parser-Pro
+```powershell
+# Parse all PDFs in a directory
+python scripts\parse_pdf_data.py --input data/raw --output data/extracted
+
+# Verify OCR setup
+python scripts\ocr_verify.py
 ```
 
-2. Install deps:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate   # or .venv\Scripts\activate on Windows
-pip install -r requirements.txt
-```
-
-3. Place PDFs in `data/raw/`.
-4. Run parser:
-
-```bash
-python scripts/parse_pdf_data.py --input data/raw --output data/extracted
-```
-
-5. Output: one CSV per PDF in `data/extracted/` plus `audit_<filename>.json` containing parsing metadata.
+**Output:**
+- `data/extracted/<pdf_basename>.csv` — Cleaned tabular data
+- `data/extracted/audit_<pdf_basename>.json` — Parsing summary (pages parsed, tables found, warnings, validation results)
 
 ---
 
-## ✅ Expected Output
+## ☁️ Deployment (Streamlit Cloud)
 
-* `data/extracted/<pdf_basename>.csv` — cleaned tabular data
-* `data/extracted/audit_<pdf_basename>.json` — parsing summary (pages parsed, tables found, warnings)
-
----
-
-## 🔧 Future Enhancements
-
-* CLI arguments (file/glob support, verbosity, dry-run)
-* OCR pipeline for scanned PDFs (`pytesseract` + `pdf2image`)
-* Streamlit UI for drag-and-drop parsing & manual corrections
-* Config-driven rules per client (mapping rules, column mappings)
-* Unit tests and CI (GitHub Actions) with sample PDFs
+1. Push latest code to GitHub
+2. Create an app at [https://share.streamlit.io/](https://share.streamlit.io/)
+3. Set `app.py` as the entry point
+4. **Done** — live URL auto-syncs on new commits
 
 ---
 
-## 🧾 Notes for Freelancing
+## 💼 Freelance Usage Tips
 
-* Provide sample PDFs and expected CSV schema in proposals.
-* Offer a small manual review pass as part of the gig to handle edge-case layouts.
-* Add a short guide in the repo explaining how to map client-specific invoice formats.
+- **Demo the app live** to clients to showcase automation ability
+- **Offer custom parsing** for specific invoice formats or multilingual PDFs
+- **Attach sample results** — one invoice + result screenshot in proposals
+- **Emphasize accuracy** — data validation, audit logging, and error handling
+- **Highlight scalability** — batch processing, API integration potential
+- **Show ROI** — hours saved vs. manual data entry costs
+
+---
+
+## 📊 Sample Output
+
+**Input:** Business invoice PDF (text or scanned)
+
+**Output CSV:**
+```csv
+description,quantity,unit_price,line_total
+Widget A,2,1000.00,2000.00
+Widget B,1,500.00,500.00
+Service C,3,250.00,750.00
+```
+
+**Audit JSON:**
+```json
+{
+    "file": "invoice_001.pdf",
+    "pages": 1,
+    "tables_found": 1,
+    "invoice_no": "INV-2025-001",
+    "date": "11/11/2025",
+    "total": "3,250.00",
+    "invoice_total_matches": true,
+    "line_sum": 3250.0,
+    "warnings": []
+}
+```
+
+---
+
+## 🎯 Key Capabilities
+
+✅ **Text-based PDFs** — Native table extraction with pdfplumber  
+✅ **Scanned PDFs** — OCR fallback with Tesseract  
+✅ **Data Normalization** — Standardized column names and types  
+✅ **Validation** — Invoice total vs. line-item sum matching  
+✅ **Audit Trail** — Complete parsing metadata for each document  
+✅ **Professional UI** — Streamlit app with branding and UX polish  
+✅ **Batch Processing** — CLI support for automated workflows  
 
 ---
 
 ## 👨‍💻 Author
 
-Bibhudendu Behera
-Aspiring AI Engineer | Freelance Data Tools
+**Bibhudendu Behera**  
+Aspiring AI Engineer & Freelance Data Tools Developer  
+📍 Bangalore, India  
+🔗 [GitHub](https://github.com/bibhu342)  
+💼 [LinkedIn](https://www.linkedin.com/in/bibhudendu-behera)
+
+---
+
+## 📄 License
+
+MIT License - feel free to use this project for your freelance work or commercial applications.
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/bibhu342/PDF-Parser-Pro/issues).
+
+---
+
+**⭐ Star this repo if you find it useful for your freelance projects!**
 Bangalore, India
 
 ---
