@@ -8,6 +8,26 @@
 
 ---
 
+## 📑 Table of Contents
+
+- [Overview](#-overview)
+- [Features](#️-features)
+- [Live Demo](#-live-demo-one-click)
+- [Demo Screenshots](#-demo-screenshots)
+- [Local Setup](#-local-setup)
+  - [OCR Setup](#ocr-setup-optional--for-scanned-pdfs)
+- [File Structure](#-file-structure)
+- [Command-Line Usage](#-command-line-usage)
+- [Deployment](#️-deployment-streamlit-cloud)
+- [Freelance Usage Tips](#-freelance-usage-tips)
+- [Sample Output](#-sample-output)
+- [Key Capabilities](#-key-capabilities)
+- [Author](#-author)
+- [License](#-license)
+- [Contributing](#-contributing)
+
+---
+
 ## 🧾 Overview
 
 **PDF-Parser-Pro** is an AI-powered Python tool that extracts structured tables and key fields from business PDFs (invoices, statements, reports). It handles both text-based and scanned PDFs using OCR, outputting clean CSVs and audit JSONs for transparency and downstream analytics.
@@ -72,27 +92,53 @@ Enable OCR processing for scanned PDFs with visual feedback.
 
 ## 💻 Local Setup
 
-```powershell
+**Requirements:** Python 3.11+ recommended
+
+```bash
 # Clone the repository
 git clone https://github.com/bibhu342/PDF-Parser-Pro.git
 cd PDF-Parser-Pro
 
 # Create and activate virtual environment
 python -m venv .venv
-.\.venv\Scripts\Activate  # Windows
+
+# Activate (Windows)
+.\.venv\Scripts\Activate
+
+# Activate (macOS/Linux)
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run Streamlit app
+streamlit run app.py
 ```
 
 **The app will open in your browser at `http://localhost:8501`**
 
-### OCR Setup (Optional - for scanned PDFs)
+### OCR Setup (optional — for scanned PDFs)
 
-For scanned PDF support, install Tesseract OCR and Poppler:
-
+**Windows (winget)**
 ```powershell
-# Install Tesseract OCR
 winget install --id UB-Mannheim.TesseractOCR
+# Poppler for Windows: download and add to PATH (http://blog.alivate.com.au/poppler-windows/)
+```
 
-# Run the setup script to configure OCR dependencies
+**macOS (Homebrew)**
+```bash
+brew install tesseract
+brew install poppler
+```
+
+**Linux (Debian/Ubuntu)**
+```bash
+sudo apt update
+sudo apt install -y tesseract-ocr poppler-utils
+```
+
+Then run:
+```bash
 python setup_ocr_dependencies.py
 ```
 
