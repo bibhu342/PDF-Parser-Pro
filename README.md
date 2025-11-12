@@ -1,3 +1,7 @@
+<!-- Build & Live badges -->
+[![Build & Parser Check](https://github.com/bibhu342/PDF-Parser-Pro/actions/workflows/ci.yml/badge.svg)](https://github.com/bibhu342/PDF-Parser-Pro/actions)
+[![Live Demo](https://img.shields.io/website?down_message=offline&label=live&up_message=online&url=https://pdf-parser-pro-bibhu342.streamlit.app)](https://pdf-parser-pro-bibhu342.streamlit.app/)
+
 # PDF-Parser-Pro
 
 **Live Demo:** [https://pdf-parser-pro-bibhu342.streamlit.app/](https://pdf-parser-pro-bibhu342.streamlit.app/) ← *Try it instantly with the demo PDF*
