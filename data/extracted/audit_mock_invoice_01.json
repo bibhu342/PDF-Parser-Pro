@@ -1,0 +1,11 @@
+{
+    "file": "mock_invoice_01.pdf",
+    "pages": 1,
+    "tables_found": 1,
+    "warnings": [],
+    "invoice_no": "INV-2025-001",
+    "date": "11/11/2025",
+    "total": "3,250.00",
+    "invoice_total_matches": true,
+    "line_sum": 3250.0
+}
